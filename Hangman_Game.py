@@ -1,24 +1,41 @@
 import random
-word_list = ["aardvark", "baboon", "camel"]
+from Hangman_Words import word_list
+from Hangman_Art import logo, stages
+
 chosen_word = random.choice(word_list)
+lives = 6
 
 #Testing code
 print(f'Pssst, the solution is {chosen_word}.')
+
+print(logo)
 
 display = []
 for letter in chosen_word:
     display.append('_')
 
-guess = input("Guess a letter: ").lower()
+hasFinished = False
 
-#TODO-2: - Loop through each position in the chosen_word;
-#If the letter at that position matches 'guess' then reveal that letter in the display at that position.
-#e.g. If the user guessed "p" and the chosen word was "apple", then display should be ["_", "p", "p", "_", "_"].
-for position in range(len(chosen_word)):
-    letter = chosen_word[position]
-    if letter == guess:
-        display[position] = guess
+while not hasFinished:
+    print('------------')
+    guess = input("Guess a letter: ").lower()
 
-#TODO-3: - Print 'display' and you should see the guessed letter in the correct position and every other letter replace with "_".
-#Hint - Don't worry about getting the user to guess the next letter. We'll tackle that in step 3.
-print(display)
+    if guess not in chosen_word:
+        lives-=1
+    elif guess in display:
+        print("This letter is already in the word")
+    else:
+        for position in range(len(chosen_word)):
+            letter = chosen_word[position]
+            if letter == guess:
+                display[position] = guess
+    
+    print(stages[lives])
+    print(display)
+
+    if '_' not in display:
+        hasFinished = True
+        print("You won!")
+    elif lives==0:
+        hasFinished = True
+        print("You lost :(")
